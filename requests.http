@@ -1,0 +1,216 @@
+// CRUD DE PRODUCTOS
+###
+POST http://localhost:3000/api/productos HTTP/1.1
+Content-Type: application/json
+
+{
+  "_id": "producto_002",
+  "nombre": "Suplemento Proteico",
+  "descripcion": "Proteína en polvo para apoyar la ganancia muscular.",
+  "precio": 50.00,
+  "tipo": "Producto"
+
+}
+
+
+###
+GET http://localhost:3000/api/productos
+
+###
+GET http://localhost:3000/api/productos/producto_001
+
+###
+PUT http://localhost:3000/api/productos/producto_001
+Content-Type: application/json
+
+{
+    "nombre":"Entrenamiento Premium",
+    "descripcion":"Sesión personalizada avanzada.",
+    "precio":150,
+    "tipo":"Servicio"
+}
+
+###
+DELETE http://localhost:3000/api/productos/producto_002
+
+//CRUD DE PROVEEDORES
+
+###
+POST http://localhost:3000/api/proveedores
+Content-Type: application/json
+
+{
+    "_id":"proveedor_001",
+    "nombre":"Juan",
+    "apellido":"Perez",
+    "correo":"juan.perez@ejemplo.com",
+    "telefono":"123456789",
+    "direccion":"Calle Falsa 123, Madrid"
+}
+
+###
+GET http://localhost:3000/api/proveedores
+
+###
+GET http://localhost:3000/api/proveedores/proveedor_001
+
+###
+PUT http://localhost:3000/api/proveedores/proveedor_001
+Content-Type: application/json
+
+{
+    "nombre":"Juan Carlos",
+    "apellido":"Perez",
+    "correo":"juan@gmail.com",
+    "telefono":"987654321",
+    "direccion":"Nueva direccion"
+}
+
+###
+DELETE http://localhost:3000/api/proveedores/proveedor_001
+
+//CRUD DE CLIENTES
+
+###
+POST http://localhost:3000/api/clientes
+Content-Type: application/json
+
+{
+    "_id":"cliente_001",
+    "nombre":"Ana",
+    "apellido":"Garcia",
+    "correo":"ana.garcia@ejemplo.com",
+    "telefono":"987654321"
+}
+
+###
+GET http://localhost:3000/api/clientes
+
+###
+GET http://localhost:3000/api/clientes/cliente_001
+
+###
+PUT http://localhost:3000/api/clientes/cliente_001
+Content-Type: application/json
+
+{
+    "nombre":"Ana Maria",
+    "apellido":"Garcia",
+    "correo":"ana@gmail.com",
+    "telefono":"3001234567"
+}
+
+###
+DELETE http://localhost:3000/api/clientes/cliente_001
+
+// CRUD DE COMPRAS
+
+###
+POST http://localhost:3000/api/compras
+Content-Type: application/json
+
+{
+  "_id": "compra_001",
+  "proveedor_id": "proveedor_001",
+  "fecha": "2024-08-01",
+  "total": 150,
+  "productos_servicios": [
+    {
+      "producto_servicio_id": "producto_001",
+      "nombre": "Entrenamiento Personalizado",
+      "precio": 100
+    },
+    {
+      "producto_servicio_id": "producto_002",
+      "nombre": "Suplemento Proteico",
+      "precio": 50
+    }
+  ]
+}
+
+###
+GET http://localhost:3000/api/compras
+
+###
+GET http://localhost:3000/api/compras/compra_001
+
+###
+PUT http://localhost:3000/api/compras/compra_001
+Content-Type: application/json
+
+{
+  "proveedor_id": "proveedor_001",
+  "fecha": "2024-08-01",
+  "total": 180,
+  "productos_servicios": [
+    {
+      "producto_servicio_id": "producto_001",
+      "nombre": "Entrenamiento Personalizado",
+      "precio": 100
+    },
+    {
+      "producto_servicio_id": "producto_002",
+      "nombre": "Suplemento Proteico",
+      "precio": 80
+    }
+  ]
+}
+
+###
+DELETE http://localhost:3000/api/compras/compra_001
+
+// CRUD DE VENTAS
+
+###
+POST http://localhost:3000/api/ventas
+Content-Type: application/json
+
+{
+  "_id": "venta_001",
+  "cliente_id": "cliente_001",
+  "fecha": "2024-08-02",
+  "total": 200,
+  "productos_servicios": [
+    {
+      "producto_servicio_id": "producto_003",
+      "nombre": "Clase de Yoga",
+      "precio": 150
+    },
+    {
+      "producto_servicio_id": "producto_004",
+      "nombre": "Manta de Yoga",
+      "precio": 50
+    }
+  ]
+}
+
+###
+GET http://localhost:3000/api/ventas
+
+###
+GET http://localhost:3000/api/ventas/venta_001
+
+###
+PUT http://localhost:3000/api/ventas/venta_001
+Content-Type: application/json
+
+{
+  "cliente_id": "cliente_001",
+  "fecha": "2024-08-02",
+  "total": 250,
+  "productos_servicios": [
+    {
+      "producto_servicio_id": "producto_003",
+      "nombre": "Clase de Yoga",
+      "precio": 180
+    },
+    {
+      "producto_servicio_id": "producto_004",
+      "nombre": "Manta de Yoga",
+      "precio": 70
+    }
+  ]
+}
+
+###
+DELETE http://localhost:3000/api/ventas/venta_001
