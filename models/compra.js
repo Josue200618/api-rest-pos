@@ -20,9 +20,14 @@ const compraSchema = mongoose.Schema({
         {
             producto_servicio_id: String,
             nombre: String,
-            precio: Number
+            precio: Number,
+            cantidad: Number
         }
-    ]
+    ],
+    estado: {
+    type: Boolean,
+    default: true
+}
 });
 
 module.exports = mongoose.model('Compra', compraSchema);

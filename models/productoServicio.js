@@ -1,9 +1,6 @@
 const mongoose = require('mongoose');
 
 const productoServicioSchema = mongoose.Schema({
-    _id: {
-        type: String
-    },
     nombre: {
         type: String,
         required: true
@@ -19,7 +16,16 @@ const productoServicioSchema = mongoose.Schema({
     tipo: {
         type: String,
         required: true
-    }
+    },
+    stock: {
+    type: Number,
+    default: 0
+    },
+
+    estado: {
+    type: Boolean,
+    default: true
+}
 });
 
 module.exports = mongoose.model('ProductoServicio', productoServicioSchema);

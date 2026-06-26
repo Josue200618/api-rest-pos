@@ -23,7 +23,11 @@ const proveedorSchema = mongoose.Schema({
     direccion: {
         type: String,
         required: true
-    }
+    },
+    estado: {
+    type: Boolean,
+    default: true
+}
 });
 
 module.exports = mongoose.model('Proveedor', proveedorSchema);

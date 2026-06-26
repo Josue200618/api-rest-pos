@@ -1,6 +1,7 @@
 const express=require('express');
 const mongoose=require('mongoose');
 require('dotenv').config();
+const cors = require('cors');
 
 
 const productoRoutes = require('./routers/productoServicio');
@@ -8,16 +9,21 @@ const proveedorRoutes = require('./routers/proveedor');
 const clienteRoutes = require('./routers/cliente');
 const compraRoutes = require('./routers/compra');
 const ventaRoutes = require('./routers/venta');
+const authRoutes = require('./routers/auth');
+const dashboardRoutes = require('./routers/dashboard');
 
 const app=express();
 const port = process.env.PORT || 3000;
 
+app.use(cors());
 app.use(express.json());
 app.use('/api', productoRoutes);
 app.use('/api', proveedorRoutes);
 app.use('/api', clienteRoutes);
 app.use('/api', compraRoutes);
 app.use('/api', ventaRoutes);
+app.use('/api', authRoutes);
+app.use('/api', dashboardRoutes);
 
 
 //routes
