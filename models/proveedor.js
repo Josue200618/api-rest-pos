@@ -1,9 +1,6 @@
 const mongoose = require('mongoose');
 
 const proveedorSchema = mongoose.Schema({
-    _id: {
-        type: String
-    },
     nombre: {
         type: String,
         required: true

@@ -6,7 +6,7 @@ const router = express.Router();
 
 // Crear
 router.post('/proveedores', verificarToken, (req, res) => {
-
+   
     const proveedor = new Proveedor(req.body);
 
     proveedor.save()
