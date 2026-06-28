@@ -44,7 +44,7 @@ router.post('/ventas', verificarToken, async (req, res) => {
 }
 
 
-}
+
 
         // Guardar venta
         const venta = new Venta(req.body);
