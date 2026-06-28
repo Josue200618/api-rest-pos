@@ -1,33 +1,89 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-const compraSchema = mongoose.Schema({
-    _id: {
-        type: String
-    },
-    proveedor_id: {
-        type: String,
+const detalleCompraSchema = new mongoose.Schema({
+
+    producto: {
+
+        type: mongoose.Schema.Types.ObjectId,
+
+        ref: "ProductoServicio",
+
         required: true
+
     },
-    fecha: {
+
+    nombre: {
+
         type: String,
+
         required: true
+
     },
-    total: {
+
+    precioCompra: {
+
         type: Number,
+
         required: true
+
     },
-    productos_servicios: [
-        {
-            producto_servicio_id: String,
-            nombre: String,
-            precio: Number,
-            cantidad: Number
-        }
-    ],
-    estado: {
-    type: Boolean,
-    default: true
-}
+
+    cantidad: {
+
+        type: Number,
+
+        required: true
+
+    },
+
+    subtotal: {
+
+        type: Number,
+
+        required: true
+
+    }
+
 });
 
-module.exports = mongoose.model('Compra', compraSchema);
+const compraSchema = new mongoose.Schema({
+
+    proveedor: {
+
+        type: mongoose.Schema.Types.ObjectId,
+
+        ref: "Proveedor",
+
+        required: true
+
+    },
+
+    fecha: {
+
+        type: Date,
+
+        default: Date.now
+
+    },
+
+    total: {
+
+        type: Number,
+
+        required: true
+
+    },
+
+    detalles: [detalleCompraSchema],
+
+    estado: {
+
+        type: Boolean,
+
+        default: true
+
+    }
+
+});
+
+module.exports = mongoose.model("Compra", compraSchema);

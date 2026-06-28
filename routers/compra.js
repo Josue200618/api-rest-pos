@@ -15,29 +15,35 @@ router.post('/compras', verificarToken, async (req, res) => {
 
         await compra.save();
 
-        // Aumentar stock de cada producto
-        for (const item of req.body.productos_servicios) {
+        // Actualizar inventario
+        for (const item of compra.detalles) {
 
-            const producto = await ProductoServicio.findById(item.producto_servicio_id);
+            const producto = await ProductoServicio.findById(item.producto);
 
-            if (producto) {
+            if (!producto) continue;
 
-                producto.stock += item.cantidad;
+            producto.stock += item.cantidad;
 
-                await producto.save();
-
-            }
+            await producto.save();
 
         }
 
-        res.json({
-            message: 'Compra registrada correctamente'
+        res.status(201).json({
+
+            message: "Compra registrada correctamente",
+
+            compra
+
         });
 
     } catch (error) {
 
+        console.log(error);
+
         res.status(500).json({
+
             message: error.message
+
         });
 
     }
@@ -62,7 +68,19 @@ router.get('/compras', verificarToken, async (req, res) => {
         const skip = (page - 1) * limit;
 
         const compras = await Compra.find(filtro)
+
+            .populate(
+                "proveedor",
+                "nombre apellido telefono correo"
+            )
+
+            .populate(
+                "detalles.producto",
+                "nombre tipo"
+            )
+
             .skip(skip)
+
             .limit(Number(limit));
 
         const total = await Compra.countDocuments(filtro);
@@ -93,26 +111,6 @@ router.get('/compras/:id', verificarToken, (req, res) => {
 
 });
 
-// Actualizar
-router.put('/compras/:id', verificarToken, (req, res) => {
-
-    Compra.updateOne(
-        { _id: req.params.id },
-        { $set: req.body }
-    )
-        .then(data => res.json(data))
-        .catch(error => res.json({ message: error }));
-
-});
-
-// Eliminar
-router.delete('/compras/:id', verificarToken, (req, res) => {
-
-    Compra.deleteOne({ _id: req.params.id })
-        .then(data => res.json(data))
-        .catch(error => res.json({ message: error }));
-
-});
 
 // Anular compra
 router.put('/compras/anular/:id', verificarToken, async (req, res) => {
@@ -138,9 +136,9 @@ router.put('/compras/anular/:id', verificarToken, async (req, res) => {
         }
 
         // Verificar que el stock no quede negativo
-        for (const item of compra.productos_servicios) {
+        for (const item of compra.detalles) {
 
-            const producto = await ProductoServicio.findById(item.producto_servicio_id);
+            const producto = await detalles.findById(item.producto)
 
             if (producto) {
 
@@ -159,7 +157,7 @@ router.put('/compras/anular/:id', verificarToken, async (req, res) => {
         // Disminuir stock
         for (const item of compra.productos_servicios) {
 
-            const producto = await ProductoServicio.findById(item.producto_servicio_id);
+            const producto = await detalles.findById(item.producto);
 
             if (producto) {
 
