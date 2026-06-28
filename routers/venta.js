@@ -10,28 +10,41 @@ router.post('/ventas', verificarToken, async (req, res) => {
 
     try {
 
+        if (!req.body.detalles || req.body.detalles.length === 0) {
+
+    return res.status(400).json({
+
+        message: "Debe agregar al menos un producto."
+
+    });
+
+}
+
         // Verificar stock de todos los productos
-        for (const item of req.body.productos_servicios) {
+    for (const item of req.body.detalles) {
 
-            const producto = await ProductoServicio.findById(item.producto_servicio_id);
+    const producto = await ProductoServicio.findById(item.producto);
 
-            if (!producto) {
+    if (!producto) {
 
-                return res.status(404).json({
-                    message: `El producto ${item.producto_servicio_id} no existe`
-                });
+        return res.status(404).json({
+            message: `El producto ${item.producto} no existe`
+        });
 
-            }
+    }
 
-            if (producto.stock < item.cantidad) {
+    if (producto.stock < item.cantidad) {
 
-                return res.status(400).json({
-                    message: `Stock insuficiente para el producto ${producto.nombre}`
-                });
+        return res.status(400).json({
+            message: `Stock insuficiente para el producto ${producto.nombre}`
+        });
 
-            }
+    }
 
-        }
+}
+
+
+}
 
         // Guardar venta
         const venta = new Venta(req.body);
@@ -39,9 +52,9 @@ router.post('/ventas', verificarToken, async (req, res) => {
         await venta.save();
 
         // Restar stock
-        for (const item of req.body.productos_servicios) {
+        for (const item of req.body.detalles) {
 
-            const producto = await ProductoServicio.findById(item.producto_servicio_id);
+            const producto = await ProductoServicio.findById(item.producto);
 
             producto.stock -= item.cantidad;
 
@@ -82,8 +95,26 @@ router.get('/ventas', verificarToken, async (req, res) => {
         const skip = (page - 1) * limit;
 
         const ventas = await Venta.find(filtro)
-            .skip(skip)
-            .limit(Number(limit));
+
+        .populate(
+
+            "cliente",
+
+            "nombre apellido telefono correo"
+
+        )
+
+        .populate(
+
+            "detalles.producto",
+
+            "nombre tipo"
+
+        )
+
+        .skip(skip)
+
+        .limit(Number(limit));
 
         const total = await Venta.countDocuments(filtro);
 
@@ -158,19 +189,19 @@ router.put('/ventas/anular/:id', verificarToken, async (req, res) => {
         }
 
         // Devolver productos al stock
-        for (const item of venta.productos_servicios) {
+        for (const item of venta.detalles) {
 
-            const producto = await ProductoServicio.findById(item.producto_servicio_id);
+    const producto = await ProductoServicio.findById(item.producto);
 
-            if (producto) {
+    if (producto) {
 
-                producto.stock += item.cantidad;
+        producto.stock += item.cantidad;
 
-                await producto.save();
+        await producto.save();
 
-            }
+    }
 
-        }
+    }
 
         // Marcar la venta como anulada
         venta.estado = false;

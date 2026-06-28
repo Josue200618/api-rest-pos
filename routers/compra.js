@@ -11,6 +11,16 @@ router.post('/compras', verificarToken, async (req, res) => {
 
     try {
 
+        if (!req.body.detalles || req.body.detalles.length === 0) {
+
+    return res.status(400).json({
+
+        message: "Debe agregar al menos un producto."
+
+    });
+
+    }
+
         const compra = new Compra(req.body);
 
         await compra.save();
@@ -138,7 +148,7 @@ router.put('/compras/anular/:id', verificarToken, async (req, res) => {
         // Verificar que el stock no quede negativo
         for (const item of compra.detalles) {
 
-            const producto = await detalles.findById(item.producto)
+            const producto = await ProductoServicio.findById(item.producto);
 
             if (producto) {
 
@@ -155,9 +165,9 @@ router.put('/compras/anular/:id', verificarToken, async (req, res) => {
         }
 
         // Disminuir stock
-        for (const item of compra.productos_servicios) {
+        for (const item of compra.detalles) {
 
-            const producto = await detalles.findById(item.producto);
+            const producto = await ProductoServicio.findById(item.producto);
 
             if (producto) {
 
