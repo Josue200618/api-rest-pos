@@ -11,6 +11,7 @@ const compraRoutes = require('./routers/compra');
 const ventaRoutes = require('./routers/venta');
 const authRoutes = require('./routers/auth');
 const dashboardRoutes = require('./routers/dashboard');
+const mailRoutes = require("./routers/mail");
 
 const app=express();
 const port = process.env.PORT || 3000;
@@ -24,7 +25,7 @@ app.use('/api', compraRoutes);
 app.use('/api', ventaRoutes);
 app.use('/api', authRoutes);
 app.use('/api', dashboardRoutes);
-
+app.use("/api", mailRoutes);
 
 //routes
 app.get('/', (req, res) => {
