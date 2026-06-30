@@ -115,9 +115,24 @@ router.post('/login', async (req, res) => {
         );
 
         res.json({
-            message: 'Autenticación exitosa',
-            token
-        });
+
+    message: "Autenticación exitosa",
+
+    token,
+
+    usuario: {
+
+        id: usuario._id,
+
+        nombre: usuario.nombre,
+
+        correo: usuario.correo,
+
+        telefono: usuario.telefono
+
+    }
+
+});
 
     } catch (error) {
 
