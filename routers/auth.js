@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const keys = require('../settings/keys');
 const LoginCode = require('../models/loginCode');
 const generateLoginCode = require('../utils/loginCodeGenerator');
-const transporter = require('../config/mail');
+const { sendMail } = require('../services/mailtrapService');
 
 const router = express.Router();
 
@@ -136,40 +136,38 @@ router.post('/login', async (req, res) => {
         });
 
         // Enviar correo
-        /*await transporter.sendMail({
+        await sendMail(
 
-            from: `"NovaPOS" <${process.env.EMAIL_USER}>`,
+    usuario.correo,
 
-            to: usuario.correo,
+    "Código de acceso NovaPOS",
 
-            subject: "Código de acceso NovaPOS",
+    `
 
-            html: `
+        <div style="font-family:Arial;padding:25px">
 
-                <div style="font-family:Arial;padding:25px">
+            <h2>Hola ${usuario.nombre}</h2>
 
-                    <h2>Hola ${usuario.nombre}</h2>
+            <p>Tu código para iniciar sesión es:</p>
 
-                    <p>Tu código para iniciar sesión es:</p>
+            <h1 style="letter-spacing:8px;color:#1976d2">
 
-                    <h1 style="letter-spacing:8px;color:#1976d2">
+                ${codigo}
 
-                        ${codigo}
+            </h1>
 
-                    </h1>
+            <p>
 
-                    <p>
+                Este código expirará en 5 minutos.
 
-                        Este código expirará en 5 minutos.
+            </p>
 
-                    </p>
+        </div>
 
-                </div>
+    `
 
-            `
-
-        });*/
-        console.log("Código generado:", codigo);
+);
+        
 
         res.json({
 
