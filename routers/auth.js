@@ -136,7 +136,7 @@ router.post('/login', async (req, res) => {
         });
 
         // Enviar correo
-        await transporter.sendMail({
+        /*await transporter.sendMail({
 
             from: `"NovaPOS" <${process.env.EMAIL_USER}>`,
 
@@ -168,7 +168,8 @@ router.post('/login', async (req, res) => {
 
             `
 
-        });
+        });*/
+        console.log("Código generado:", codigo);
 
         res.json({
 
