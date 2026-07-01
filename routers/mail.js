@@ -7,8 +7,10 @@ const router = express.Router();
 router.get("/test-mail", async (req, res) => {
 
     try {
+        
 
         await transporter.sendMail({
+            
 
             from: `"NovaPOS" <${process.env.EMAIL_USER}>`,
 
@@ -26,7 +28,7 @@ router.get("/test-mail", async (req, res) => {
 
             `
 
-        });
+        }); 
 
         res.json({
 
