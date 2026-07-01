@@ -4,7 +4,8 @@ const jwt = require('jsonwebtoken');
 const keys = require('../settings/keys');
 const LoginCode = require('../models/loginCode');
 const generateLoginCode = require('../utils/loginCodeGenerator');
-const { sendMail } = require('../services/mailtrapService');
+const { sendMail } = require('../services/mailService');
+
 
 const router = express.Router();
 
@@ -385,48 +386,45 @@ router.post("/forgot-password", async (req, res) => {
         });
 
         // Enviar correo
-        await transporter.sendMail({
+        await sendMail(
 
-            from: `"NovaPOS" <${process.env.EMAIL_USER}>`,
+    usuario.correo,
 
-            to: usuario.correo,
+    "Recuperación de contraseña NovaPOS",
 
-            subject: "Recuperación de contraseña NovaPOS",
+    `
 
-            html: `
+        <div style="font-family:Arial;padding:25px">
 
-                <div style="font-family:Arial;padding:25px">
+            <h2>Hola ${usuario.nombre}</h2>
 
-                    <h2>Hola ${usuario.nombre}</h2>
+            <p>Solicitaste recuperar tu contraseña.</p>
 
-                    <p>Solicitaste recuperar tu contraseña.</p>
+            <p>Tu código es:</p>
 
-                    <p>Tu código es:</p>
+            <h1 style="letter-spacing:8px;color:#1976d2">
 
-                    <h1 style="letter-spacing:8px;color:#1976d2">
+                ${codigo}
 
-                        ${codigo}
+            </h1>
 
-                    </h1>
+            <p>
 
-                    <p>
+                El código expirará en 5 minutos.
 
-                        El código expirará en 5 minutos.
+            </p>
 
-                    </p>
+            <p>
 
-                    <p>
+                Si no realizaste esta solicitud puedes ignorar este correo.
 
-                        Si no realizaste esta solicitud puedes ignorar este correo.
+            </p>
 
-                    </p>
+        </div>
 
-                </div>
+    `
 
-            `
-
-        });
-
+);
         res.json({
 
             ok: true,
